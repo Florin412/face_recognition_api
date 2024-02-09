@@ -32,6 +32,8 @@ const dataBase = {
   ids: 124
 };
 
+// Cors package is used for trust, so Google Chrome will trust in this server
+// and will not throw an error when this server gives to him a response.
 app.use(cors());
 // Middlewares for translate data from client.
 app.use(express.json());
@@ -91,7 +93,6 @@ app.post("/register", (req, res) => {
 
   bcrypt.hash(password, saltRounds, function (err, hash) {
     console.log(password, hash);
-    console.log(typeof hash);
   });
 
   // Send the user's data to the client.
