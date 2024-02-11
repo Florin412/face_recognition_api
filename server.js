@@ -114,7 +114,7 @@ app.get("/profile/:id", (req, res) => {
 app.put("/image", (req, res) => {
   const { id } = req.body;
 
-  db("users")
+  return db("users")
     .where("id", "=", id)
     .increment("entries", 1)
     .returning("entries")
@@ -130,6 +130,10 @@ app.put("/image", (req, res) => {
     .catch((err) => {
       res.status(400).json("Error getting the entries.");
     });
+});
+
+app.get("/image", (req, res) => {
+  db.select("entries").from("users")
 });
 
 app.listen(3000, () => {
