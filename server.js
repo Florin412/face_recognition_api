@@ -2,6 +2,20 @@ const express = require("express");
 const bcrypt = require("bcrypt");
 const cors = require("cors");
 
+const knex = require("knex");
+
+const db = knex({
+  client: "pg",
+  connection: {
+    host: "127.0.0.1", // localhost
+    port: 5432,
+    user: "remus",
+    password: "test",
+    database: "smart_brain"
+  }
+});
+
+
 // This is for bcrypt in order to work.
 const saltRounds = 10;
 
@@ -81,22 +95,18 @@ app.post("/signin", (req, res) => {
 // Register Route.
 app.post("/register", (req, res) => {
   const { name, email, password } = req.body;
-  dataBase.ids++;
 
-  dataBase.users.push({
-    id: dataBase.ids.toString(),
-    name: name,
-    email: email,
-    entries: 0,
-    joined: new Date()
-  });
-
-  bcrypt.hash(password, saltRounds, function (err, hash) {
-    console.log(password, hash);
-  });
-
-  // Send the user's data to the client.
-  res.json(dataBase.users[dataBase.users.length - 1]);
+  db("users")
+    // ceea ce pui ca si parametru in aceasta metoda de returning,
+    // va fi returnat de o instructiune de: insert, update sau delete
+    .returning("*")
+    .insert({ name: name, email: email, joined: new Date() })
+    .then((respons) => {
+      res.json(respons[0]);
+    })
+    .catch((err) => {
+      res.status(400).send("Unnable to register !");
+    });
 });
 
 // Profile Route.
