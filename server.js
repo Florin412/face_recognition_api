@@ -95,17 +95,31 @@ app.post("/signin", (req, res) => {
 app.post("/register", (req, res) => {
   const { name, email, password } = req.body;
 
-  db("users")
-    // ceea ce pui ca si parametru in aceasta metoda de returning,
-    // va fi returnat de o instructiune de: insert, update sau delete
-    .returning("*")
-    .insert({ name: name, email: email, joined: new Date() })
-    .then((respons) => {
-      res.json(respons[0]);
-    })
-    .catch((err) => {
-      res.status(400).send("Unnable to register !");
-    });
+  const hash = bcrypt.hashSync(password, saltRounds);
+
+  db.transaction((trx) => {
+    trx
+      .insert({
+        hash: hash,
+        email: email
+      })
+      .into("login")
+      .returning("email")
+      .then((logInEmail) => {
+        trx("users")
+          .returning("*")
+          .insert({
+            email: logInEmail[0].email,
+            name: name,
+            joined: new Date()
+          })
+          .then((user) => {
+            res.json(user[0]);
+          });
+      })
+      .then(trx.commit)
+      .catch(trx.rollback);
+  }).catch((err) => res.status(400).json("Unable to register."));
 });
 
 // Profile Route.
