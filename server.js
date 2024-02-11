@@ -1,7 +1,6 @@
 const express = require("express");
 const bcrypt = require("bcrypt");
 const cors = require("cors");
-
 const knex = require("knex");
 
 const db = knex({
@@ -14,7 +13,6 @@ const db = knex({
     database: "smart_brain"
   }
 });
-
 
 // This is for bcrypt in order to work.
 const saltRounds = 10;
@@ -49,6 +47,7 @@ const dataBase = {
 // Cors package is used for trust, so Google Chrome will trust in this server
 // and will not throw an error when this server gives to him a response.
 app.use(cors());
+
 // Middlewares for translate data from client.
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -112,37 +111,42 @@ app.post("/register", (req, res) => {
 // Profile Route.
 app.get("/profile/:id", (req, res) => {
   const { id } = req.params;
-  let userFound = false;
 
-  dataBase.users.forEach((user) => {
-    if (user.id === id) {
-      userFound = true;
-      res.json(user);
-    }
-  });
-
-  if (!userFound) {
-    res.status(400).json("User not found");
-  }
+  db.select("*")
+    .from("users")
+    .where("id", id)
+    .then((user) => {
+      if (user.length) {
+        res.json(user[0]);
+      } else {
+        res.status(400).json("User not found");
+      }
+    })
+    .catch((err) => {
+      res.status(400).json("Error getting the user.");
+    });
 });
 
 // Image Route.
 app.put("/image", (req, res) => {
   const { id } = req.body;
 
-  let userFound = false;
+  db("users")
+    .where("id", "=", id)
+    .increment("entries", 1)
+    .returning("entries")
+    .then((entries) => {
+      console.log(entries[0]);
 
-  dataBase.users.forEach((user) => {
-    if (user.id === id) {
-      userFound = true;
-      user.entries++;
-      res.json(user.entries);
-    }
-  });
-
-  if (!userFound) {
-    res.status(400).json("User not found");
-  }
+      if (entries.length) {
+        res.json(entries[0]);
+      } else {
+        res.status(400).json("Cannot get the entries.");
+      }
+    })
+    .catch((err) => {
+      res.status(400).json("Error getting the entries.");
+    });
 });
 
 app.listen(3000, () => {
