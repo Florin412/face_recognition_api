@@ -1,6 +1,10 @@
 const handleRegister = (req, res, db, bcrypt, saltRounds) => {
   const { name, email, password } = req.body;
 
+  if (!name || !email || !password) {
+    return res.status(400).json("Invalid credentials.");
+  }
+
   const hash = bcrypt.hashSync(password, saltRounds);
 
   db.transaction((trx) => {
