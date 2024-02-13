@@ -31,6 +31,10 @@ app.use(express.urlencoded({ extended: true }));
         ROUTE DEFINITIONS
 ============================== */
 
+app.get("/", (req, res) => {
+  res.json("server working.");
+});
+
 // Signin Route.
 app.post("/signin", (req, res) => {
   const { email, password } = req.body;
@@ -133,7 +137,7 @@ app.put("/image", (req, res) => {
 });
 
 app.get("/image", (req, res) => {
-  db.select("entries").from("users")
+  db.select("entries").from("users");
 });
 
 app.listen(3000, () => {
