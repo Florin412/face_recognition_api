@@ -6,6 +6,7 @@ const register = require("./controllers/register");
 const signin = require("./controllers/signin");
 const profile = require("./controllers/profile");
 const image = require("./controllers/image");
+const image_api_call = require("./controllers/image_api_call");
 
 const db = knex({
   client: "pg",
@@ -57,6 +58,10 @@ app.get("/profile/:id", (req, res) => {
 // Image Route.
 app.put("/image", (req, res) => {
   image.handleImage(req, res, db);
+});
+
+app.post("/imageurl", (req, res) => {
+  image_api_call.handleApiCall(req, res);
 });
 
 app.listen(3000, () => {
