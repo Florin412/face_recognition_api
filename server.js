@@ -64,7 +64,6 @@ app.post("/imageurl", (req, res) => {
   image_api_call.handleApiCall(req, res);
 });
 
-// salut
 app.listen(process.env.PORT, () => {
   console.log(`Server is listening on port ${process.env.PORT}.`);
 });
