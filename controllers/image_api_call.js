@@ -5,7 +5,7 @@ const getModelId = () => {
 
 // Configuration Object for Api Call.
 const getRequestOptions = (imageURL) => {
-  const PAT = "fb9e54191c4247b692492bb0febbd734";
+  const PAT = process.env.API_PAT;
   const USER_ID = "lupau412";
   const APP_ID = "my_app";
   const IMAGE_URL = imageURL;
