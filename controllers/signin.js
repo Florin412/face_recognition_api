@@ -14,7 +14,7 @@ const handleSignIn = (req, res, db, bcrypt) => {
       if (isValid) {
         db.select("*")
           .from("users")
-          .where("email", "=", email)
+          .where("email", "=", data[0].email)
           .then((user) => {
             res.json(user[0]);
           })
