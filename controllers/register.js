@@ -16,7 +16,7 @@ const handleRegister = (req, res, db, bcrypt, saltRounds) => {
       .into("login")
       .returning("email")
       .then((logInEmail) => {
-        trx("users")
+        return trx("users")
           .returning("*")
           .insert({
             email: logInEmail[0].email,
