@@ -7,24 +7,29 @@ const signin = require("./controllers/signin");
 const profile = require("./controllers/profile");
 const image = require("./controllers/image");
 const image_api_call = require("./controllers/image_api_call");
+const path = require("path");
+const favicon = require("serve-favicon"); // Add this line to import the favicon module
 
-const db = knex({
-  client: "pg",
-  connection: {
-    connectionString: process.env.DATABASE_URL,
-    ssl: { rejectUnauthorized: false },
-    host: process.env.DATABASE_HOST,
-    port: 5432,
-    user: process.env.DATABASE_USER,
-    password: process.env.DATABASE_PW,
-    database: process.env.DATABASE_DB
-  }
-});
+// const db = knex({
+//   client: "pg",
+//   connection: {
+//     connectionString: process.env.DATABASE_URL,
+//     ssl: { rejectUnauthorized: false },
+//     host: process.env.DATABASE_HOST,
+//     port: 5432,
+//     user: process.env.DATABASE_USER,
+//     password: process.env.DATABASE_PW,
+//     database: process.env.DATABASE_DB
+//   }
+// });
 
 // This is for bcrypt in order to work.
 const saltRounds = 10;
 
 const app = express();
+
+// Serve the favicon
+app.use(favicon(path.join(__dirname, "favicon.png")));
 
 // Cors package is used for trust, so Google Chrome will trust in this server
 // and will not throw an error when this server gives to him a response.
@@ -66,6 +71,10 @@ app.post("/imageurl", (req, res) => {
   image_api_call.handleApiCall(req, res);
 });
 
-app.listen(process.env.PORT, () => {
-  console.log(`Server is listening on port ${process.env.PORT}.`);
+// app.listen(process.env.PORT, () => {
+//   console.log(`Server is listening on port ${process.env.PORT}.`);
+// });
+
+app.listen(3001, () => {
+  console.log(`Server is listening on port 3001.`);
 });
