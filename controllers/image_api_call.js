@@ -11,7 +11,7 @@ const getRequestOptions = (imageURL) => {
   // Uncomment the below link when in production.
   // const PAT = process.env.API_PAT;
 
-  const PAT = process.env.API_KEY;
+  const PAT = process.env.API_PAT;
   const USER_ID = process.env.USER_ID;
   const APP_ID = process.env.APP_ID;
   const IMAGE_URL = imageURL;
