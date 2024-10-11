@@ -10,18 +10,47 @@ const image_api_call = require("./controllers/image_api_call");
 const path = require("path");
 const favicon = require("serve-favicon"); // Add this line to import the favicon module
 
+// Below are imported sensitive data from a configuration file (.env), just for development.
+// In production, configure env variables from your hosting platform, with the same name as below.
+require("dotenv").config();
+
+// Below you can see the db client for production mode
+
 // const db = knex({
 //   client: "pg",
 //   connection: {
-//     connectionString: process.env.DATABASE_URL,
+//     connectionString: process.env.DB_URL,
 //     ssl: { rejectUnauthorized: false },
-//     host: process.env.DATABASE_HOST,
+//     host: process.env.DB_HOST,
 //     port: 5432,
-//     user: process.env.DATABASE_USER,
-//     password: process.env.DATABASE_PW,
-//     database: process.env.DATABASE_DB
+//     user: process.env.DB_USER,
+//     password: process.env.DB_PASS,
+//     database: process.env.DB_NAME
 //   }
 // });
+
+// Below you can see the db client for development mode.
+// You should comment this on production.
+
+const db = knex({
+  client: "pg",
+  connection: {
+    host: process.env.DB_HOST, // The IP address for localhost
+    port: process.env.DB_PORT, // The default port for PostgreSQL
+    user: process.env.DB_USER, // The PostgreSQL username
+    password: process.env.DB_PASS, // The password for the PostgreSQL user
+    database: process.env.DB_NAME // The name of the database
+  }
+});
+
+// Connection test for the database
+db.raw("SELECT 1")
+  .then(() => {
+    console.log("Connected to the database!");
+  })
+  .catch((err) => {
+    console.error("Error connecting to the database:", err);
+  });
 
 // This is for bcrypt in order to work.
 const saltRounds = 10;
@@ -71,10 +100,7 @@ app.post("/imageurl", (req, res) => {
   image_api_call.handleApiCall(req, res);
 });
 
-// app.listen(process.env.PORT, () => {
-//   console.log(`Server is listening on port ${process.env.PORT}.`);
-// });
-
-app.listen(3001, () => {
-  console.log(`Server is listening on port 3001.`);
+app.listen(process.env.SERVER_PORT, () => {
+  console.log(`Server is listening on port ${process.env.SERVER_PORT}.`);
 });
+

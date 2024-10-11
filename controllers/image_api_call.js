@@ -1,3 +1,6 @@
+// Below are imported sensitive data from env variable.
+require("dotenv").config();
+
 // Here you can set the model you are using from Clarifai API.
 const getModelId = () => {
   return "face-detection";
@@ -5,9 +8,12 @@ const getModelId = () => {
 
 // Configuration Object for Api Call.
 const getRequestOptions = (imageURL) => {
-  const PAT = process.env.API_PAT;
-  const USER_ID = "lupau412";
-  const APP_ID = "my_app";
+  // Uncomment the below link when in production.
+  // const PAT = process.env.API_PAT;
+
+  const PAT = process.env.API_KEY;
+  const USER_ID = process.env.USER_ID;
+  const APP_ID = process.env.APP_ID;
   const IMAGE_URL = imageURL;
 
   const raw = JSON.stringify({
