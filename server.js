@@ -9,6 +9,8 @@ const image = require("./controllers/image");
 const image_api_call = require("./controllers/image_api_call");
 const path = require("path");
 const favicon = require("serve-favicon"); // Add this line to import the favicon module
+const jwt = require("jsonwebtoken");
+const authenticateToken = require("./middleware/authMiddleware");
 
 // Below are imported sensitive data from a configuration file (.env), just for development.
 // In production, configure env variables from your hosting platform, with the same name as below.
@@ -86,21 +88,25 @@ app.post("/register", (req, res) => {
   register.handleRegister(req, res, db, bcrypt, saltRounds);
 });
 
-// Profile Route.
-app.get("/profile/:id", (req, res) => {
+app.get("/profile", authenticateToken, (req, res) => {
   profile.handleProfile(req, res, db);
 });
 
 // Image Route.
-app.put("/image", (req, res) => {
+app.put("/image", authenticateToken, (req, res) => {
   image.handleImage(req, res, db);
 });
 
-app.post("/imageurl", (req, res) => {
+app.post("/imageurl", authenticateToken, (req, res) => {
   image_api_call.handleApiCall(req, res);
+});
+
+// Ruta pentru verificarea tokenului
+app.post("/verify-token", authenticateToken, (req, res) => {
+  // Dacă middleware-ul trece, tokenul este valid
+  res.json({ valid: true, user: req.user }); // Poți trimite și datele utilizatorului dacă dorești
 });
 
 app.listen(process.env.SERVER_PORT, () => {
   console.log(`Server is listening on port ${process.env.SERVER_PORT}.`);
 });
-

@@ -1,6 +1,3 @@
-// Below are imported sensitive data from env variable.
-require("dotenv").config();
-
 // Here you can set the model you are using from Clarifai API.
 const getModelId = () => {
   return "face-detection";
@@ -47,6 +44,8 @@ const getRequestOptions = (imageURL) => {
 // Here we are doing the call to Clarifay api.
 const handleApiCall = (req, res) => {
   const { input } = req.body;
+
+  // aici verifii tokenul
 
   fetch(
     "https://api.clarifai.com/v2/models/" + getModelId() + "/outputs",
