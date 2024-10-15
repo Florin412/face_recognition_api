@@ -5,9 +5,12 @@ const getModelId = () => {
 
 // Configuration Object for Api Call.
 const getRequestOptions = (imageURL) => {
+  // Uncomment the below link when in production.
+  // const PAT = process.env.API_PAT;
+
   const PAT = process.env.API_PAT;
-  const USER_ID = "lupau412";
-  const APP_ID = "my_app";
+  const USER_ID = process.env.USER_ID;
+  const APP_ID = process.env.APP_ID;
   const IMAGE_URL = imageURL;
 
   const raw = JSON.stringify({
@@ -41,6 +44,8 @@ const getRequestOptions = (imageURL) => {
 // Here we are doing the call to Clarifay api.
 const handleApiCall = (req, res) => {
   const { input } = req.body;
+
+  // aici verifii tokenul
 
   fetch(
     "https://api.clarifai.com/v2/models/" + getModelId() + "/outputs",

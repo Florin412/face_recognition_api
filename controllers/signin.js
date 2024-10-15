@@ -1,5 +1,9 @@
+const jwt = require("jsonwebtoken");
+
 const handleSignIn = (req, res, db, bcrypt) => {
   const { email, password } = req.body;
+
+  const JWT_SECRET = process.env.JWT_SECRET;
 
   if (!email || !password) {
     return res.status(400).json("incorrect form submission");
@@ -16,7 +20,18 @@ const handleSignIn = (req, res, db, bcrypt) => {
           .from("users")
           .where("email", "=", email)
           .then((user) => {
-            res.json(user[0]);
+           
+            // Crearea tokenului JWT
+            const token = jwt.sign(
+              { userId: user[0].id, email: user[0].email }, // Asigură-te că transmiți userId și email aici
+              JWT_SECRET, // Secretul pentru semnarea tokenului
+              { expiresIn: "1h" } // Tokenul expiră după o oră
+            );
+
+            // Trimite userul si token-ul către client
+            res.status(200).json({ user: user[0], token: token });
+
+            
           })
           .catch((err) => res.status(400).json("unable to get user"));
       } else {
