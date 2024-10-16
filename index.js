@@ -9,7 +9,6 @@ const image = require("./controllers/image");
 const image_api_call = require("./controllers/image_api_call");
 const path = require("path");
 const favicon = require("serve-favicon"); // Add this line to import the favicon module
-const jwt = require("jsonwebtoken");
 const authenticateToken = require("./middleware/authMiddleware");
 
 // Below are imported sensitive data from a configuration file (.env), just for development.
