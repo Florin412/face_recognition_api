@@ -32,17 +32,11 @@ require("dotenv").config();
 
 // Below you can see the db client for development mode.
 // You should comment this on production.
-console.log("Hai ca se sincronizeaza");
+console.log("Hai sa vedem daca merge");
 
 const db = knex({
   client: "pg",
-  connection: {
-    host: process.env.DB_HOST, // The IP address for localhost
-    port: process.env.DB_PORT, // The default port for PostgreSQL
-    user: process.env.DB_USER, // The PostgreSQL username
-    password: process.env.DB_PASS, // The password for the PostgreSQL user
-    database: process.env.DB_NAME // The name of the database
-  }
+  connection: process.env.POSTGRES_URI
 });
 
 // Connection test for the database

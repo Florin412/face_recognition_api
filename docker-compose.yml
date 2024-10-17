@@ -1,4 +1,5 @@
 services:
+  # Backend API
   smart-brain-api:
     container_name: backend
     build: ./
@@ -6,6 +7,12 @@ services:
     working_dir: /usr/src/smart-brain-api
     ports:
       - "3001:3001"
+    environment:
+      - POSTGRES_URI=postgres://remus:test@postgres:5432/smart-brain-docker
+    depends_on:
+      - postgres
+    links:
+      - postgres
     develop:
       watch:
         - action: sync
@@ -15,3 +22,15 @@ services:
             - node_modules/
         - action: rebuild
           path: package.json
+
+  # Postgres
+  postgres:
+    container_name: postgres
+    image: postgres
+    environment:
+      - POSTGRES_USER=remus
+      - POSTGRES_PASSWORD=test
+      - POSTGRES_DB=smart-brain-docker
+      - POSTGRES_HOST=postgres
+    ports:
+      - "5432:5432"
