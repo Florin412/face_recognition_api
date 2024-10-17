@@ -32,6 +32,7 @@ require("dotenv").config();
 
 // Below you can see the db client for development mode.
 // You should comment this on production.
+console.log("Hai ca se sincronizeaza");
 
 const db = knex({
   client: "pg",
