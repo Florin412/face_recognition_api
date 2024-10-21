@@ -77,6 +77,9 @@ app.use(express.urlencoded({ extended: true }));
         ROUTE DEFINITIONS
 ============================== */
 
+// Servește fișierele statice din folderul build (React build)
+app.use(express.static(path.join(__dirname, "client/build")));
+
 app.get("/", (req, res) => {
   res.json("server working.");
 });
@@ -108,6 +111,11 @@ app.post("/imageurl", authenticateToken, (req, res) => {
 app.post("/verify-token", authenticateToken, (req, res) => {
   // Dacă middleware-ul trece, tokenul este valid
   res.json({ valid: true, user: req.user });
+});
+
+// Catch-all route to serve React's `index.html`
+app.get("*", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
 });
 
 app.listen(process.env.SERVER_PORT, () => {
