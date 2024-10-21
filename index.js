@@ -1,5 +1,5 @@
 const express = require("express");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const cors = require("cors");
 const knex = require("knex");
 const register = require("./controllers/register");
@@ -35,12 +35,16 @@ require("dotenv").config();
 
 const db = knex({
   client: "pg",
+  // use the first connection when using DOCKER, cause it makes to connection to docker database, then comment the secound connection.
+  // connection: process.env.POSTGRES_URI
+
+  // this connection is for localhost, it connect to HOST database.
   connection: {
-    host: process.env.DB_HOST, // The IP address for localhost
-    port: process.env.DB_PORT, // The default port for PostgreSQL
-    user: process.env.DB_USER, // The PostgreSQL username
-    password: process.env.DB_PASS, // The password for the PostgreSQL user
-    database: process.env.DB_NAME // The name of the database
+    host: process.env.DB_HOST,
+    port: 5432,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASS,
+    database: process.env.DB_NAME
   }
 });
 
@@ -103,7 +107,7 @@ app.post("/imageurl", authenticateToken, (req, res) => {
 // Ruta pentru verificarea tokenului
 app.post("/verify-token", authenticateToken, (req, res) => {
   // Dacă middleware-ul trece, tokenul este valid
-  res.json({ valid: true, user: req.user }); // Poți trimite și datele utilizatorului dacă dorești
+  res.json({ valid: true, user: req.user });
 });
 
 app.listen(process.env.SERVER_PORT, () => {
