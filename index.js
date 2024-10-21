@@ -17,29 +17,11 @@ require("dotenv").config();
 
 // Below you can see the db client for production mode
 
-// const db = knex({
-//   client: "pg",
-//   connection: {
-//     connectionString: process.env.DB_URL,
-//     ssl: { rejectUnauthorized: false },
-//     host: process.env.DB_HOST,
-//     port: 5432,
-//     user: process.env.DB_USER,
-//     password: process.env.DB_PASS,
-//     database: process.env.DB_NAME
-//   }
-// });
-
-// Below you can see the db client for development mode.
-// You should comment this on production.
-
 const db = knex({
   client: "pg",
-  // use the first connection when using DOCKER, cause it makes to connection to docker database, then comment the secound connection.
-  // connection: process.env.POSTGRES_URI
-
-  // this connection is for localhost, it connect to HOST database.
   connection: {
+    connectionString: process.env.DB_URL,
+    ssl: { rejectUnauthorized: false },
     host: process.env.DB_HOST,
     port: 5432,
     user: process.env.DB_USER,
@@ -47,6 +29,24 @@ const db = knex({
     database: process.env.DB_NAME
   }
 });
+
+// Below you can see the db client for development mode.
+// You should comment this on production.
+
+// const db = knex({
+//   client: "pg",
+//   // use the first connection when using DOCKER, cause it makes to connection to docker database, then comment the secound connection.
+//   // connection: process.env.POSTGRES_URI
+
+//   // this connection is for localhost, it connect to HOST database.
+//   connection: {
+//     host: process.env.DB_HOST,
+//     port: 5432,
+//     user: process.env.DB_USER,
+//     password: process.env.DB_PASS,
+//     database: process.env.DB_NAME
+//   }
+// });
 
 // Connection test for the database
 db.raw("SELECT 1")
