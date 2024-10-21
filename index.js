@@ -32,7 +32,6 @@ require("dotenv").config();
 
 // Below you can see the db client for development mode.
 // You should comment this on production.
-console.log("Hai sa vedem daca merge");
 
 const db = knex({
   client: "pg",
@@ -98,7 +97,7 @@ app.post("/imageurl", authenticateToken, (req, res) => {
 // Ruta pentru verificarea tokenului
 app.post("/verify-token", authenticateToken, (req, res) => {
   // Dacă middleware-ul trece, tokenul este valid
-  res.json({ valid: true, user: req.user }); // Poți trimite și datele utilizatorului dacă dorești
+  res.json({ valid: true, user: req.user }); 
 });
 
 app.listen(process.env.SERVER_PORT, () => {
