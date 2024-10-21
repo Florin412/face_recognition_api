@@ -5,6 +5,8 @@ const handleRegister = (req, res, db, bcrypt, saltRounds) => {
 
   const JWT_SECRET = process.env.JWT_SECRET;
 
+  console.log(name, email, password, JWT_SECRET);
+
   if (!name || !email || !password) {
     return res.status(400).json("Invalid credentials.");
   }
@@ -35,6 +37,7 @@ const handleRegister = (req, res, db, bcrypt, saltRounds) => {
               { expiresIn: "1h" } // Tokenul expiră după o oră
             );
 
+            console.log({ user: user[0], token: token });
             // Trimite userul si token-ul către client
             res.status(200).json({ user: user[0], token: token });
           });
