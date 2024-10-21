@@ -35,7 +35,17 @@ require("dotenv").config();
 
 const db = knex({
   client: "pg",
-  connection: process.env.POSTGRES_URI
+  // use the first connection when using DOCKER, cause it makes to connection to docker database, then comment the secound connection.
+  // connection: process.env.POSTGRES_URI
+
+  // this connection is for localhost, it connect to HOST database.
+  connection: {
+    host: process.env.DB_HOST,
+    port: 5432,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASS,
+    database: process.env.DB_NAME
+  }
 });
 
 // Connection test for the database
@@ -97,7 +107,7 @@ app.post("/imageurl", authenticateToken, (req, res) => {
 // Ruta pentru verificarea tokenului
 app.post("/verify-token", authenticateToken, (req, res) => {
   // Dacă middleware-ul trece, tokenul este valid
-  res.json({ valid: true, user: req.user }); 
+  res.json({ valid: true, user: req.user });
 });
 
 app.listen(process.env.SERVER_PORT, () => {
